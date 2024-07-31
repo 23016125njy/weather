@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather History Tracker</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #e0f7fa;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+        h1 {
+            margin-top: 20px;
+            font-size: 2em;
+            color: #00796b;
+        }
+        .links {
+            margin: 20px 0;
+        }
+        .form-container {
+            background-image: url('https://img.freepik.com/premium-photo/beautiful-sky-colorful-gentle-light-day-backgroundpicturesque_31965-185332.jpg?size=626&ext=jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center">
+        <h1>Weather History Tracker</h1>
+        <div class="links">
+            <a href="/" class="btn btn-primary">Homepage</a>
+            <a href="/compare" class="btn btn-secondary">Compare Weather</a>
+            
+            <% if (!userid) { %>
+                <div class="links">
+                    <a href="/login" class="btn btn-primary">Login</a>
+                    <a href="/register" class="btn btn-secondary">Register</a>
+                </div>
+            <% } else { %>
+                <br>    
+                <br>
+                <p>Welcome, User!</p>
+                <br>
+                <a href="/logout" class="btn btn-danger">Logout</a>
+                <a href="/user/<%= userid %>/favs" class="btn btn-info">My Favorites</a>
+            <% } %>
+            
+        </div>
+
+        <!-- Favorites Selection Form -->
+        <div class="form-container">
+            <form action="/favorite?userid=<%= userid %>" method="POST" class="mb-4">
+                <div class="form-group">
+                    <label for="area_name">Select Favorite Location:</label>
+                    <select id="area_name" name="area_name" class="form-control" required>
+                        <% locations.forEach(location => { %>
+                            <option value="<%= location.area_name %>"><%= location.area_name %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Add to Favorites</button>
+            </form>
+        </div>
+
+        <!-- Search Form -->
+        <div class="form-container">
+            <form action="/search" method="POST">
+                <div class="form-group">
+                    <label for="location">Location:</label>
+                    <select id="location" name="location" class="form-control" required>
+                        <% locations.forEach(location => { %>
+                            <option value="<%= location.area_name %>"><%= location.area_name %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="date">Date:</label>
+                    <input type="date" id="date" name="date" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Find Weather</button>
+            </form>
+        </div>
+
+        <% if (forecasts && forecasts.length > 0) { %>
+            <div class="results-container">
+                <h2>Weather Results</h2>
+                <ul class="list-group">
+                    <% forecasts.forEach(forecast => { %>
+                        <li class="list-group-item">
+                            <strong>Location:</strong> <%= forecast.area_name %> | 
+                            <strong>Forecast:</strong> <%= forecast.forecast %> | 
+                            <strong>Date:</strong> <%= forecast.timestamp %>
+                        </li>
+                    <% }); %>
+                </ul>
+            </div>
+        <% } else if (forecasts) { %>
+            <h2>No results found for the selected location and date.</h2>
+        <% } %>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

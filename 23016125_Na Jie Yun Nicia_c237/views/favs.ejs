@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favorites</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #e0f7fa;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+        h1 {
+            margin-top: 20px;
+            font-size: 2em;
+            color: #00796b;
+        }
+        .links {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .links a {
+            text-decoration: none;
+            color: #00796b;
+            font-weight: bold;
+            padding: 10px;
+            border: 1px solid #00796b;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .links a:hover {
+            background-color: #00796b;
+            color: #fff;
+        }
+        .favorites-box {
+            background-image: url('https://img.freepik.com/premium-photo/beautiful-sky-colorful-gentle-light-day-backgroundpicturesque_31965-185332.jpg?size=626&ext=jpg');
+            background-size: cover;
+            background-position: center;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>My Favorite Locations</h1>
+    <div class="links">
+        <a href="/user/<%= userid %>">Homepage</a>
+        <a href="/compare">Compare Weather</a>
+        
+        <% if (!userid) { %>
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+        <% } else { %>
+            <a href="/logout">Logout</a>
+            <a href="/user/<%= userid %>/favs">My Favorites</a>
+        <% } %>
+    </div>
+    
+    <div class="favorites-box">
+        <ul class="list-group">
+            <% favs.forEach(favorite => { %>
+                <li class="list-group-item">
+                    <strong><%= favorite.area_name %></strong> - 
+                    <span style="color: red;">Latest Forecast: <%= favorite.forecast %></span>
+                    <form action="/favs/delete" method="POST" style="display:inline;">
+                        <input type="hidden" name="favId" value="<%= favorite.favId %>">
+                        <input type="hidden" name="userid" value="<%= userid %>">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+    
+</body>
+</html>
