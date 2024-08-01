@@ -20,8 +20,7 @@ app.use(express.static('views'));
 
 // MySQL Database connection
 const connection = mysql.createConnection({
-    host: 'localhost',
-    port: 3358,
+    host: 'mysql-nicia.alwaysdata.net',
     user: 'nicia',
     password: 'nicia12345!',
     database: 'nicia_weather'
